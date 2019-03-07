@@ -1,3 +1,3 @@
 # EarRecognitionSys
 Ear recognitino system of next generation
->Go my boss
+>老板们冲啊
