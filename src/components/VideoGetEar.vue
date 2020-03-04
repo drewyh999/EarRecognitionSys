@@ -51,8 +51,9 @@
                 <p class="type_title">
                     <span>上传图片</span>
                 </p>
+                <!-- 上传的地址 -->
                 <el-upload class="avatar-uploader"
-                           action="http://localhost:5000/upload"
+                           action="https://jsonplaceholder.typicode.com/posts/"
                            v-bind:data="{FoldPath:'上传目录',SecretKey:'安全验证'}"
                            v-bind:on-progress="uploadimageProcess"
                            v-bind:on-success="handleimageSuccess"
@@ -60,11 +61,15 @@
                            v-bind:show-file-list="false">
                     <i v-if="imageForm.showimagePath =='' && !imageFlag"
                        class="el-icon-plus e_icon"></i>
-                    <div v-if="imageFlag == true" style="height: 260px;width: 350px;">
+                    <div v-if="imageFlag == true" style="height: 260px;width: 350px">
                         <el-progress
                                  type="circle"
                                  v-bind:percentage="imageUploadPercent"
                                  ></el-progress>
+                    </div>
+                    <!-- 上传完成后显示图片 -->
+                     <div v-if="isShowUploadimage == true" style="height: 260px;width: 350px;border: 2px dashed #d9d9d9;">
+                        <img  v-if="imageForm.showimagePath" :src="imageForm.showimagePath"  style="height:100%;width:100%">
                     </div>
                 </el-upload>
                 <el-card class="box-card" style="width: 350px">
@@ -86,12 +91,12 @@
                 </el-form>
                 </el-card>
 
-                <video v-if="imageForm.showimagePath !='' && !imageFlag"
+                <!-- <video v-if="imageForm.showimagePath !='' && !imageFlag"
                        v-bind:src="imageForm.showimagePath"
                        class="avatar video-avatar"
                        controls="controls">
                     您的浏览器不支持视频播放
-                </video>
+                </video> -->
                  <p>
                     *支持图片格式为png/jpg/jpeg
                 </p>
@@ -134,7 +139,8 @@ export default {
                   'gender':'',
                   'age':'',
               },
-              Formloading:false
+              Formloading:false,
+              imageUrl:""
 
         }},
         methods:{
@@ -169,8 +175,9 @@ export default {
                 this.videoUploadPercent = file.percentage.toFixed(0) * 1;
             },
             uploadimageProcess(event, file) {
-                this.imageFlag = true;
-                this.imageUploadPercent = file.percentage.toFixed(0) * 1;
+                 this.imageFlag = true;
+                 this.imageUploadPercent = file.percentage.toFixed(0)*1;
+                console.log(this.imageUploadPercent)
             },
             //上传成功回调
             handleVideoSuccess(res) {
@@ -194,10 +201,14 @@ export default {
                     layer.msg(res.Message);
                 }
             },
-            handleimageSuccess(res) {
-                this.isShowUploadimage = true;
+            handleimageSuccess(res,file) {
                 this.imageFlag = false;
+                this.isShowUploadimage = true;
                 this.imageUploadPercent = 0;
+
+                //上传成功后显示
+                this.imageForm.showimagePath = URL.createObjectURL(file.raw);
+
 
                 //前台上传地址
                 // if (file.status == 'success' ) {
@@ -207,13 +218,13 @@ export default {
                 // }
 
                 //后台上传地址
-                if (res.Code == 0) {
-                    this.videoForm.showVideoPath = res.data;
-                    console.log(this.imageForm.showimagePath);
-                    this.EarFaceURL = "http://localhost:5000/static/face_ear/1_0.jpg";
-                } else {
-                    layer.msg(res.Message);
-                }
+                // if (res.Code == 0) {
+                //     this.videoForm.showVideoPath = res.data;
+                //     console.log(this.imageForm.showimagePath);
+                //     this.EarFaceURL = "http://localhost:5000/static/face_ear/1_0.jpg";
+                // } else {
+                //     layer.msg(res.Message);
+                // }
             },
             submit(){
                 this.buttonLog = '请稍后';
