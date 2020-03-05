@@ -67,7 +67,7 @@
                                  ></el-progress>
                     </div>
                 </el-upload>
-                <el-card class="box-card" style="width: 350px">
+                <el-card class="box-card" v-if="!videoFlag" style="width: 350px">
                 <el-form :model="ruleForm"  label-width="50px" class="ruleForm" v-loading="Formloading">
                     <el-form-item label="姓名" >
                         <el-input v-model="ruleForm.name" autocomplete="off"></el-input>

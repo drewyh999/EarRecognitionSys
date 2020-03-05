@@ -33,11 +33,13 @@ function mouse_scroll(e){
   document.documentElement.scrollLeft+=move_s; //非chrome浏览器用这个
   // document.getElementById('form').style.transform = "translate(" + move_s + "px,0)";
 // chrome浏览器用这个
+  var original_radius_x = parseInt(document.getElementById('form').style.borderRadius[0]);
+  var original_radius_y = parseInt(document.getElementById('form').style.borderRadius[3]);
   if(document.documentElement.scrollLeft==0){
     document.body.scrollLeft+=0.1 * move_s;
     // document.getElementById('form').style.transform = "translate(" + move_s + "px,0)"
+    document.getElementById('form').style.borderRadius = (move_s * 10 + original_radius_x) + "px 0 0 " + (move_s * 10 + original_radius_y) + "px";
   }
-
   return false;
 }
 //这个是给对象增加监控方法的函数
